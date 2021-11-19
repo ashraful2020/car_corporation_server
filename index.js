@@ -16,7 +16,7 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// console.log(uri);
+
 // var serviceAccount = require('./car-corporation-firebase-adminsdk.json');
 
 // admin.initializeApp({
