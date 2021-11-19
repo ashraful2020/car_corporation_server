@@ -90,7 +90,6 @@ async function run() {
 
     //get orders data from server
     app.get('/orders', async (req, res) => {
-      console.log('as');
       const cursor = ordersCollection.find({});
       const orders = await cursor.toArray();
       console.log(orders);
@@ -147,16 +146,27 @@ async function run() {
       if (query) {
         const requesterAccount = await userCollection.findOne({ email: query });
         console.log(requesterAccount ,149);
-        // if (requesterAccount.role === 'admin') {
           const filter = { email: user.email };
           const updateUser = { $set: { role: "admin" } };
           const result = await userCollection.updateOne(filter, updateUser);
           res.json(result)
-        // }
       }
       else {
         res.status(403).json({ message: "You don't have access" })
       }
+    })
+
+    app.put('/updateStatue/:id', async(req, res)=> {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) }
+      const options = { upsert: true };
+      const updatedDoc = {
+        $set: {
+          'status': 'Approved'
+        }
+      };
+      const result = await ordersCollection.updateOne(query, updatedDoc, options)
+      res.json(result)
     })
   }
 
