@@ -17,27 +17,27 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
-// var serviceAccount = require('./car-corporation-firebase-adminsdk.json');
+var serviceAccount = require('./car-corporation-firebase-adminsdk.json');
 
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount)
-// });
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
-// async function verifyToken(req, res, next) {
-//   if (req.headers?.authorization?.startsWith('bearer ')) {
-//     const token = req.headers.authorization.split(' ')[1];
+async function verifyToken(req, res, next) {
+  if (req.headers?.authorization?.startsWith('bearer ')) {
+    const token = req.headers.authorization.split(' ')[1];
 
-//     try {
-//       const decodedUser = await admin.auth().verifyIdToken(token);
-//       req.decodedEmail = decodedUser.email;
-//     }
-//     catch {
+    try {
+      const decodedUser = await admin.auth().verifyIdToken(token);
+      req.decodedEmail = decodedUser.email;
+    }
+    catch {
 
-//     }
+    }
 
-//   }
-//   next();
-// }
+  }
+  next();
+}
 
 
 async function run() {
@@ -64,6 +64,8 @@ async function run() {
       const car = await cursor.toArray();
       res.send(car)
     })
+ 
+
 
     // GET Single data
     app.get('/car/:id', async (req, res) => {
@@ -74,7 +76,7 @@ async function run() {
     })
 
     //GET API  Load Car  data in ui
-    app.get('/', verifyToken , async (req, res) => {
+    app.get('/' , async (req, res) => {
       const cursor = extraCareCollection.find({})
       const care = await cursor.toArray();
       res.send(care)
@@ -89,9 +91,11 @@ async function run() {
 
     //get orders data from server
     app.get('/orders', async (req, res) => {
+      console.log('as');
       const cursor = ordersCollection.find({});
       const orders = await cursor.toArray();
-      res.json(orders)
+      console.log(orders);
+      res.send(orders)
     })
 
     //Post user info in server
@@ -104,7 +108,7 @@ async function run() {
     app.get('/users', async (req, res) => {
       const cursor = userCollection.find({});
       const user = await cursor.toArray();
-      res.json(user)
+      res.send(user)
     })
     
     
