@@ -73,7 +73,7 @@ async function run() {
       res.json(cursor)
     })
 
-    //GET API  Load Car  data
+    //GET API  Load Car  data in ui
     app.get('/', verifyToken , async (req, res) => {
       const cursor = extraCareCollection.find({})
       const care = await cursor.toArray();
@@ -94,7 +94,6 @@ async function run() {
       res.json(orders)
     })
 
-    
     //Post user info in server
     app.post('/users', async (req, res) => {
       const user = req.body;
